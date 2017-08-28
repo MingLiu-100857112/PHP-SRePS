@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+  <link rel="stylesheet" href="stylesheets/style.css">
+  <title>PHP-SRePS</title>
+</head>
+
+<body>
+  <div class="mdl-grid">
+    <div class="mdl-cell mdl-cell--12-col">
+      <form>
+        <div class="demo-card-wide mdl-card mdl-shadow--2dp">
+          <div class="mdl-card__title">
+            <h2 class="mdl-card__title-text">New Sale Record</h2>
+          </div>
+          <div class="mdl-card__supporting-text">
+              <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input class="mdl-textfield__input" type="text" id="item">
+                <label class="mdl-textfield__label" for="item">Item</label>
+              </div>
+              <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="quantity">
+                <label class="mdl-textfield__label" for="quantity">Quantity</label>
+                <span class="mdl-textfield__error">Quantity must be a number</span>
+              </div>
+          </div>
+          <div class="mdl-card__actions mdl-card--border">
+            <input class="mdl-button mdl-js-button mdl-button--primary" type="submit" value="Add Record"></input>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="mdl-cell mdl-cell--12-col">
+      <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+        <thead>
+          <tr>
+            <th class="mdl-data-table__cell--non-numeric">Item</th>
+            <th>Quantity</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+      </table>
+    </div>
+  </div>
+  <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.3/angular.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/4.2.0/firebase.js"></script>
+  <script src="scripts/main.js"></script>
+</body>
+
+</html>
