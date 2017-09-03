@@ -18,7 +18,20 @@ database.child('records').on('value', snapshot => {
     const item = $('<td/>').addClass('mdl-data-table__cell--non-numeric').text(array[i].item).appendTo(tr);
     const quantity = $('<td/>').text(array[i].quantity).appendTo(tr);
     const date = $('<td/>').text(array[i].date).appendTo(tr);
-
+   
+$(document).ready(() => {
+  $('form').on('submit', event => {
+    const item = $('#item');
+    const quantity = $('#quantity');
+    const date = new Date();
+    const record = { item: item.val(), quantity: quantity.val(), date: date };
+    const recordKey = database.child('records').push().key;
+    const updates = {}; updates['/records/' + recordKey] = record;
+    database.update(updates);
+    quantity.val('');
+    item.val('');
+  });
+});
   });
 });
 
