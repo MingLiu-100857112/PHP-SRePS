@@ -1,3 +1,5 @@
+
+//Explan the following statements OK?
 firebase.initializeApp({
   apiKey: 'AIzaSyDMY_A5Y0PqvqxZk27gkjhe5UOjAZ1yZXs',
   authDomain: 'php-sreps.firebaseapp.com',
