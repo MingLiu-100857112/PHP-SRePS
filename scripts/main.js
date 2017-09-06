@@ -9,7 +9,7 @@ firebase.initializeApp({
   messagingSenderId: '137723334567'
 });
 
-//Explan the below statements OK?
+
 const database = firebase.database().ref();
 
 database.child('records').on('value', snapshot => {
