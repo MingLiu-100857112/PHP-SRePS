@@ -21,7 +21,9 @@ database.child('records').on('value', snapshot => {
     const item = $('<td/>').addClass('mdl-data-table__cell--non-numeric').text(array[i].item).appendTo(tr);
     const quantity = $('<td/>').text(array[i].quantity).appendTo(tr);
     const date = $('<td/>').text(array[i].date).appendTo(tr);
-   
+    
+    
+ //Explan the following statements OK?   
 $(document).ready(() => {
   $('form').on('submit', event => {
     const item = $('#item');
