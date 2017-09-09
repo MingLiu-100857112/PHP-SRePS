@@ -10,7 +10,7 @@ firebase.initializeApp({
 });
 
 //explain this code below...
-//....
+//....how to build CSV file export function?
 const database = firebase.database().ref();
 
 database.child('records').on('value', snapshot => {
