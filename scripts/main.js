@@ -10,7 +10,6 @@ firebase.initializeApp({
 });
 
 //explain this code below...
-//........
 const database = firebase.database().ref();
 
 database.child('records').on('value', snapshot => {
