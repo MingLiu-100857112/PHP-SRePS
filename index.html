@@ -12,14 +12,14 @@
   <div id="vue" class="uk-grid-small" uk-grid>
     <div>
       <record-form></record-form>
+      <report-form v-bind:reports="reports"></report-form>
     </div>
     <record-table>
       <record-row
         v-for="record in records"
         v-bind:record="record"
         v-bind:key="record.id"
-        v-on:update="updateRecord"
-        v-on:remove="removeRecord">
+        v-on:update="updateRecord">
       </record-row>
     </record-table>
   </div>

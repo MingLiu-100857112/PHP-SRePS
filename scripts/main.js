@@ -15,7 +15,7 @@ Vue.filter('formatDate', date => {
 
 Vue.component('record-form', {
   template: `
-    <div class="uk-card uk-card-default uk-card-hover uk-card-body">
+    <div class="uk-card uk-card-default uk-card-hover uk-card-body uk-margin-bottom">
       <form
         v-on:submit.prevent="addNewRecord"
         class="uk-form-stacked">
@@ -125,7 +125,7 @@ Vue.component('record-row', {
         <td>
           <input
             v-model.trim="newRecord.title"
-            v-on:keyup.enter="updateRecord"
+            v-on:keyup.enter="doneEditing"
             class="uk-input uk-form-small uk-form-width-small"
             placeholder="Title"
             type="text">
@@ -133,7 +133,7 @@ Vue.component('record-row', {
         <td>
           <input
             v-model.trim="newRecord.quantity"
-            v-on:keyup.enter="updateRecord"
+            v-on:keyup.enter="doneEditing"
             class="uk-input uk-form-small uk-form-width-small"
             placeholder="Quantity"
             type="text">
@@ -141,7 +141,7 @@ Vue.component('record-row', {
         <td>
           <input
             v-model.trim="newRecord.date"
-            v-on:keyup.enter="updateRecord"
+            v-on:keyup.enter="doneEditing"
             class="uk-input uk-form-small uk-form-width-medium"
             placeholder="Date"
             type="text">
@@ -156,7 +156,7 @@ Vue.component('record-row', {
       <td>
         <button
           v-if="editing"
-          v-on:click="loadRecord"
+          v-on:click="endEditing"
           class="uk-button uk-button-default uk-button-small">
           Cancel
         </button>
@@ -164,12 +164,12 @@ Vue.component('record-row', {
           v-else
           class="uk-button-group">
           <button
-            v-on:click="editRecord"
+            v-on:click="beginEditing"
             class="uk-button uk-button-secondary uk-button-small">
             Edit
           </button>
           <button
-            v-on:click="removeRecord"
+            v-on:click="remove"
             class="uk-button uk-button-danger uk-button-small">
             Remove
           </button>
@@ -179,18 +179,28 @@ Vue.component('record-row', {
   data: function() {
     return {
       editing: false,
-      newRecord: this.record
+      newRecord: {
+        id: this.record.id,
+        title: this.record.title,
+        quantity: this.record.quantity,
+        date: this.record.date
+      }
     }
   },
   methods: {
-    editRecord: function() {
-      this.editing = !this.editing
+    beginEditing: function() {
+      this.editing = true
     },
-    loadRecord: function() {
+    endEditing: function() {
       this.editing = false
-      this.newRecord = this.record
+      this.newRecord = {
+        id: this.record.id,
+        title: this.record.title,
+        quantity: this.record.quantity,
+        date: this.record.date
+      }
     },
-    updateRecord: function() {
+    doneEditing: function() {
       this.editing = false
       this.newRecord = {
         id: this.newRecord.id,
@@ -198,33 +208,39 @@ Vue.component('record-row', {
         quantity: +this.newRecord.quantity,
         date: new Date(this.newRecord.date)
       }
-      this.$emit('update', this.newRecord)
+      database.child('records/' + this.newRecord.id).update({
+        title: this.newRecord.title,
+        quantity: this.newRecord.quantity,
+        date: this.newRecord.date
+      })
     },
-    removeRecord: function() {
-      this.$emit('remove', this.record.id)
+    remove: function() {
+      database.child('records/' + this.record.id).remove()
     }
-  },
-  computed: {
-
   }
+})
+
+Vue.component('report-form', {
+  props: ['reports'],
+  template: `
+    <div class="uk-card uk-card-default uk-card-hover uk-card-body uk-margin-bottom">
+      <h3 class="uk-card-title">Summary Report</h3>
+      <table class="uk-table uk-table-small uk-table-divider">
+        <tbody>
+          <tr v-for="report in reports">
+            <td class="uk-text-left">{{ report.title }}</td>
+            <td class="uk-text-right">{{ report.quantity }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>`
 })
 
 const vm = new Vue({
   el: '#vue',
   data: {
-    records: []
-  },
-  methods: {
-    updateRecord: function(record) {
-      database.child('records/' + record.id).update({
-        title: record.title,
-        quantity: record.quantity,
-        date: record.date
-      })
-    },
-    removeRecord: function(id) {
-      database.child('records/' + id).remove()
-    }
+    records: [],
+    reports: []
   }
 })
 
@@ -241,5 +257,20 @@ database.child('records').on('value', snapshot => {
   }
   else {
     vm.records = []
+  }
+})
+
+database.child('reports').on('value', snapshot => {
+  if (snapshot.val() !== null) {
+    const object = snapshot.val()
+    vm.reports = Object.keys(object).map(key => {
+      const report = {}
+      report.quantity = +object[key]
+      report.title = key
+      return report
+    })
+  }
+  else {
+    vm.reports = []
   }
 })
